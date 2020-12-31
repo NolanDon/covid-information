@@ -4,16 +4,30 @@
 //
 //  Created by Nolan on 2020-12-29.
 //
-
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    @IBOutlet var Buttons: [UIButton]!
+    @IBOutlet weak var covidImage: UIImageView!
+    @IBOutlet weak var SelectCountryButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .lightGray
+        
+        for button in Buttons {
+            button.layer.cornerRadius = 8
+        }
     }
-
-
+    
+    @IBAction func didClickSelectCountry() {
+        guard let vc = storyboard?.instantiateViewController(identifier: "second")
+        else {
+            print("couldn't find second view controller")
+            return
+        }
+        present(vc, animated: true)
+    }
 }
 
