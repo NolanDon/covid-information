@@ -14,8 +14,10 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var SwitzerlandButton: UIButton!
     @IBOutlet weak var JapanButton: UIButton!
     @IBOutlet weak var GermanyButton: UIButton!
-    
     @IBOutlet var Buttons: [UIButton]!
+    
+    var ext: String = ""
+    var delegate = DataProtocol(data: "", country: "", city: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,17 +31,44 @@ class SecondViewController: UIViewController {
         }
     }
     
+    func loadTableView() {
+        DispatchQueue.main.async {
+            if let vc = self.storyboard?.instantiateViewController(identifier: "tableview") {
+                self.present(vc, animated: true)
+            }
+        }
+    }
+    
+    func getCovidRequest() {
+        
+        let covidRequest = CovidRequest()
+        
+        covidRequest.getCovidResult() {
+            
+        [weak self] result in
+        switch result {
+            case .failure(let error):
+                print(error)
+                break;
+            case .success(let covidResult):
+                self?.delegate.data = covidResult["data"] ?? "No Data Available"
+            }
+        }
+    }
+   
+    
     @IBAction func onButtonClick(sender: UIButton) {
+        
+        let delegate = DataProtocol(data: "", country: "", city: "")
         
         switch sender {
             case CanadaButton :
-                print("Canada Button Clicked")
                 
-                DispatchQueue.main.async {
-                    if let vc = self.storyboard?.instantiateViewController(identifier: "tableview") {
-                        self.present(vc, animated: true)
-                    }
-                }
+                delegate.country = "canada"
+                delegate.city = ""
+                
+                self.loadTableView()
+
                 break;
             case UsaButton :
                 print("Usa Button clicked")

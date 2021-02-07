@@ -9,6 +9,8 @@ import UIKit
 
 class TableViewController: UITableViewController {
 
+    var delegate: DataProtocol?
+    
     @IBOutlet weak var backToCountrySelectionButton: UIButton!
     
     override func viewDidLoad() {
@@ -19,18 +21,10 @@ class TableViewController: UITableViewController {
         backToCountrySelectionButton.setTitleColor(.white, for: .normal)
         backToCountrySelectionButton.frame.size = CGSize(width: 100.0, height: 35.0)
         
-        let covidRequest = CovidRequest()
-        covidRequest.getCovidResult() {
-            [weak self] result in
-            switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let covidResult):
-                print(covidResult)
-            }
-        }
+        print(delegate?.data)
+        
     }
-
+    
     @IBAction func didClickBack() {
         DispatchQueue.main.async {
             if let vc = self.storyboard?.instantiateViewController(identifier: "second") {
@@ -38,6 +32,7 @@ class TableViewController: UITableViewController {
             }
         }
     }
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
