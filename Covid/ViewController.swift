@@ -6,13 +6,22 @@
 //
 import UIKit
 
+
+extension Notification.Name {
+    static let didReceiveData = Notification.Name("didReceiveData")
+    static let didCompleteTask = Notification.Name("didCompleteTask")
+    static let completedLengthyDownload = Notification.Name("completedLengthyDownload")
+}
+
 class ViewController: UIViewController {
+    
     
     @IBOutlet var Buttons: [UIButton]!
     @IBOutlet weak var covidImage: UIImageView!
     @IBOutlet weak var SelectCountryButton: UIButton!
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         view.backgroundColor = .lightGray
         

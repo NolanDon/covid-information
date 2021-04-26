@@ -8,8 +8,12 @@
 import UIKit
 
 class TableViewController: UITableViewController {
-
-    var delegate: DataProtocol?
+    
+    
+    var dataStorage = DataProtocol()
+    var data: String = "";
+    var country: String = "";
+    weak var delegate: SecondViewController!
     
     @IBOutlet weak var backToCountrySelectionButton: UIButton!
     
@@ -20,9 +24,9 @@ class TableViewController: UITableViewController {
         backToCountrySelectionButton.backgroundColor = .darkGray
         backToCountrySelectionButton.setTitleColor(.white, for: .normal)
         backToCountrySelectionButton.frame.size = CGSize(width: 100.0, height: 35.0)
-        
-        print(delegate?.data)
-        
+        self.data = self.dataStorage.data
+        self.country = self.dataStorage.country
+        print("cheerios",self.data, self.country)
     }
     
     @IBAction func didClickBack() {

@@ -16,8 +16,17 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var GermanyButton: UIButton!
     @IBOutlet var Buttons: [UIButton]!
     
+    
+    
+    @objc func onDidReceiveData(_ notification: Notification) {
+        // Do something now
+    }
+    
+    var apiResult: String = ""
     var ext: String = ""
-    var delegate = DataProtocol(data: "", country: "", city: "")
+    var dataStorage = DataProtocol()
+    
+    var tableViewController = TableViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,29 +38,40 @@ class SecondViewController: UIViewController {
             button.setTitleColor(.white, for: .normal)
             button.frame.size = CGSize(width: 100.0, height: 35.0)
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidReceiveData(_:)), name: .didReceiveData, object: nil)
+        
     }
     
-    func loadTableView() {
+    func loadTableView(data: String, country: String) {
         DispatchQueue.main.async {
             if let vc = self.storyboard?.instantiateViewController(identifier: "tableview") {
                 self.present(vc, animated: true)
+                
             }
         }
     }
     
-    func getCovidRequest() {
+    func navigateController() {
+        print("navigating")
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(self.tableViewController, animated: true)
+        }
+    }
+    
+    func getCovidRequest(country: String) {
         
-        let covidRequest = CovidRequest()
+        let covidRequest = CovidRequest(country: country)
         
         covidRequest.getCovidResult() {
-            
         [weak self] result in
         switch result {
             case .failure(let error):
                 print(error)
-                break;
             case .success(let covidResult):
-                self?.delegate.data = covidResult["data"] ?? "No Data Available"
+                self?.tableViewController.data = covidResult["data"] ?? "No Data Available"
+                self?.tableViewController.country = country
+                self?.navigateController()
             }
         }
     }
@@ -59,28 +79,36 @@ class SecondViewController: UIViewController {
     
     @IBAction func onButtonClick(sender: UIButton) {
         
-        let delegate = DataProtocol(data: "", country: "", city: "")
-        
         switch sender {
             case CanadaButton :
                 
-                delegate.country = "canada"
-                delegate.city = ""
+                self.getCovidRequest(country: "canada")
                 
-                self.loadTableView()
 
                 break;
             case UsaButton :
-                print("Usa Button clicked")
+                
+                self.getCovidRequest(country: "USA")
+//                self.loadTableView()
+                
                 break;
             case SwitzerlandButton :
-                print("Switzerland Button clicked")
+                
+                self.getCovidRequest(country: "switzerland")
+//                self.loadTableView()
+                
                 break;
             case JapanButton :
-                print("Japan Button clicked")
+                
+                self.getCovidRequest(country: "Japan")
+//                self.loadTableView()
+                
                 break;
             case GermanyButton :
-                print("Germany Button clicked")
+                
+                self.getCovidRequest(country: "Germany")
+//                self.loadTableView()
+                
                 break;
             default :
                 print("default")

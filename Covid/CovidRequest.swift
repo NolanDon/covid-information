@@ -14,12 +14,12 @@ enum CovidResponseError:Error {
 
 struct CovidRequest {
     let resourceURL: URL
-//    let ext: String
+    let country: String
     
     
-    init() {
-//        self.ext = ext
-        let resourceString = "https://api.covid19api.com/country/canada\(ext)"
+    init(country: String) {
+        self.country = country
+        let resourceString = "https://api.covid19api.com/country/\(country)"
         
         guard let resourceURL = URL(string: resourceString) else {
             fatalError()
@@ -27,7 +27,7 @@ struct CovidRequest {
         self.resourceURL = resourceURL
     }
     
-    func getCovidResult(completion: @escaping(Result<[String: String], CovidResponseError>) -> String) {
+    func getCovidResult(completion: @escaping(Result<[String: String], CovidResponseError>) -> Void) {
         
         let dataTask = URLSession.shared.dataTask(with: resourceURL) {data, _, _ in
             
